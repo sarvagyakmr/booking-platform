@@ -30,4 +30,7 @@ public class Resource extends BaseEntity {
 
     // ID reference only (to ResourceGroup) - enables add/remove in ResourceGroupService
     private Long resourceGroupId;
+
+    // ID reference to the client who owns this resource
+    private Long clientId;
 }

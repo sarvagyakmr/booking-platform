@@ -7,26 +7,27 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 /**
  * REST Controller for ServiceBooking (uses ServiceBookingDtoService).
  */
 @RestController
 @RequestMapping("/api/service-bookings")
 @RequiredArgsConstructor
-public class ServiceBookingController {
+public class ServiceBookingController extends AbstractController {
 
     private final ServiceBookingDtoService serviceBookingDtoService;
 
     @PostMapping
     public ResponseEntity<ServiceBookingResponse> create(@RequestBody ServiceBookingRequest request) {
+        Long clientId = getClientId();
+        request.setClientId(clientId);
         return ResponseEntity.ok(serviceBookingDtoService.create(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ServiceBookingResponse> getById(@PathVariable(name = "id") Long id) {
-        return serviceBookingDtoService.getById(id)
+        Long clientId = getClientId();
+        return serviceBookingDtoService.getById(id, clientId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

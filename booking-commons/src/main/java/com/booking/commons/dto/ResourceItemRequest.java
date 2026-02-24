@@ -15,4 +15,5 @@ public class ResourceItemRequest {
     private String description;
     private Long resourceId;  // ID ref
     private Integer quantityAvailable;
+    private Long clientId;  // ID ref - set from request header
 }

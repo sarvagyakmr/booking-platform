@@ -13,4 +13,5 @@ import lombok.NoArgsConstructor;
 public class ResourceGroupRequest {
     private String name;
     private String description;
+    private Long clientId;  // ID ref - set from request header
 }

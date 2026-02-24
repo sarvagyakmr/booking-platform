@@ -27,6 +27,7 @@ public class ServiceDtoService {
         service.setDurationMinutes(request.getDurationMinutes());
         service.setPrice(request.getPrice());
         service.setResourceGroupId(request.getResourceGroupId());
+        service.setClientId(request.getClientId());
         return service;
     }
 
@@ -36,13 +37,13 @@ public class ServiceDtoService {
         return ServiceResponse.fromEntity(saved);
     }
 
-    public Optional<ServiceResponse> getById(Long id) {
-        return serviceService.getById(id)
+    public Optional<ServiceResponse> getById(Long id, Long clientId) {
+        return serviceService.getById(id, clientId)
                 .map(ServiceResponse::fromEntity);
     }
 
-    public List<ServiceResponse> getByResourceGroupId(Long resourceGroupId) {
-        return serviceService.getByResourceGroupId(resourceGroupId).stream()
+    public List<ServiceResponse> getByResourceGroupId(Long resourceGroupId, Long clientId) {
+        return serviceService.getByResourceGroupId(resourceGroupId, clientId).stream()
                 .map(ServiceResponse::fromEntity)
                 .toList();
     }

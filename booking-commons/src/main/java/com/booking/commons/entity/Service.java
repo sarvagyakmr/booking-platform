@@ -31,4 +31,7 @@ public class Service extends BaseEntity {
 
     // ID reference only (to ResourceGroup)
     private Long resourceGroupId;
+
+    // ID reference to the client who owns this service
+    private Long clientId;
 }

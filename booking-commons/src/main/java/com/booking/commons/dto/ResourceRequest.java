@@ -16,4 +16,5 @@ public class ResourceRequest {
     private String type;
     private Integer capacity;
     private Long resourceGroupId;  // ID ref
+    private Long clientId;  // ID ref - set from request header
 }

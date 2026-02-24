@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * DTO service for ResourceItem - mirrors methods with Request/Response conversion.
@@ -25,6 +26,7 @@ public class ResourceItemDtoService {
         item.setDescription(request.getDescription());
         item.setResourceId(request.getResourceId());
         item.setQuantityAvailable(request.getQuantityAvailable());
+        item.setClientId(request.getClientId());
         return item;
     }
 
@@ -34,9 +36,14 @@ public class ResourceItemDtoService {
         return ResourceItemResponse.fromEntity(saved);
     }
 
-    public List<ResourceItemResponse> getAllByResourceId(Long resourceId) {
-        return resourceItemService.getAllByResourceId(resourceId).stream()
+    public List<ResourceItemResponse> getAllByResourceId(Long resourceId, Long clientId) {
+        return resourceItemService.getAllByResourceId(resourceId, clientId).stream()
                 .map(ResourceItemResponse::fromEntity)
                 .toList();
+    }
+
+    public Optional<ResourceItemResponse> getById(Long id, Long clientId) {
+        return resourceItemService.getById(id, clientId)
+                .map(ResourceItemResponse::fromEntity);
     }
 }

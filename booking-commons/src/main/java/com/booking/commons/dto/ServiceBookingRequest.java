@@ -20,4 +20,5 @@ public class ServiceBookingRequest {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String status;  // e.g., "PENDING" - convert to enum
+    private Long clientId;  // ID ref - set from request header
 }

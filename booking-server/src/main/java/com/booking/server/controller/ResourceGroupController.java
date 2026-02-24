@@ -17,27 +17,32 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/resource-groups")
 @RequiredArgsConstructor
-public class ResourceGroupController {
+public class ResourceGroupController extends AbstractController {
 
     private final ResourceGroupDtoService resourceGroupDtoService;
 
     @PostMapping
     public ResponseEntity<ResourceGroupResponse> create(@RequestBody ResourceGroupRequest request) {
+        Long clientId = getClientId();
+        request.setClientId(clientId);
         return ResponseEntity.ok(resourceGroupDtoService.create(request));
     }
 
     @PostMapping("/{groupId}/add-resource/{resourceId}")
     public ResponseEntity<Resource> addResourceToGroup(@PathVariable(name = "resourceId") Long resourceId, @PathVariable(name = "groupId") Long groupId) {
-        return ResponseEntity.ok(resourceGroupDtoService.addResourceToGroup(resourceId, groupId));
+        Long clientId = getClientId();
+        return ResponseEntity.ok(resourceGroupDtoService.addResourceToGroup(resourceId, groupId, clientId));
     }
 
     @PostMapping("/remove-resource/{resourceId}")
     public ResponseEntity<Resource> removeResourceFromGroup(@PathVariable(name = "resourceId") Long resourceId) {
-        return ResponseEntity.ok(resourceGroupDtoService.removeResourceFromGroup(resourceId));
+        Long clientId = getClientId();
+        return ResponseEntity.ok(resourceGroupDtoService.removeResourceFromGroup(resourceId, clientId));
     }
 
     @GetMapping
     public ResponseEntity<List<ResourceGroupResponse>> getAll() {
-        return ResponseEntity.ok(resourceGroupDtoService.getAll());
+        Long clientId = getClientId();
+        return ResponseEntity.ok(resourceGroupDtoService.getAll(clientId));
     }
 }

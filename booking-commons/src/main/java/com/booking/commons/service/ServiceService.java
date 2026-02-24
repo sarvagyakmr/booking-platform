@@ -1,5 +1,6 @@
 package com.booking.commons.service;
 
+import com.booking.commons.exception.ClientIdMismatchException;
 import com.booking.commons.repository.ServiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,22 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
-    public Optional<com.booking.commons.entity.Service> getById(Long id) {
-        return serviceRepository.findById(id);
+    public Optional<com.booking.commons.entity.Service> getById(Long id, Long clientId) {
+        Optional<com.booking.commons.entity.Service> serviceOpt = serviceRepository.findById(id);
+        if (serviceOpt.isPresent()) {
+            com.booking.commons.entity.Service service = serviceOpt.get();
+            if (!service.getClientId().equals(clientId)) {
+                throw new ClientIdMismatchException("Client ID does not match the service owner");
+            }
+        }
+        return serviceOpt;
     }
 
-    public List<com.booking.commons.entity.Service> getByResourceGroupId(Long resourceGroupId) {
+    public List<com.booking.commons.entity.Service> getByResourceGroupId(Long resourceGroupId, Long clientId) {
         // Simple filter; extend repo for production
         return serviceRepository.findAll().stream()
                 .filter(s -> resourceGroupId.equals(s.getResourceGroupId()))
+                .filter(s -> clientId.equals(s.getClientId()))
                 .toList();
     }
 }

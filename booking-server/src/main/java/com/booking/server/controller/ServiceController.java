@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REST Controller for Service (uses ServiceDtoService).
@@ -16,24 +15,28 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/services")
 @RequiredArgsConstructor
-public class ServiceController {
+public class ServiceController extends AbstractController {
 
     private final ServiceDtoService serviceDtoService;
 
     @PostMapping
     public ResponseEntity<ServiceResponse> create(@RequestBody ServiceRequest request) {
+        Long clientId = getClientId();
+        request.setClientId(clientId);
         return ResponseEntity.ok(serviceDtoService.create(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ServiceResponse> getById(@PathVariable(name = "id") Long id) {
-        return serviceDtoService.getById(id)
+        Long clientId = getClientId();
+        return serviceDtoService.getById(id, clientId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/by-group/{resourceGroupId}")
     public ResponseEntity<List<ServiceResponse>> getByResourceGroupId(@PathVariable(name = "resourceGroupId") Long resourceGroupId) {
-        return ResponseEntity.ok(serviceDtoService.getByResourceGroupId(resourceGroupId));
+        Long clientId = getClientId();
+        return ResponseEntity.ok(serviceDtoService.getByResourceGroupId(resourceGroupId, clientId));
     }
 }

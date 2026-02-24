@@ -40,4 +40,7 @@ public class ServiceBooking extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private BookingStatus status;  // e.g., PENDING, CONFIRMED, CANCELLED
+
+    // ID reference to the client who owns this booking
+    private Long clientId;
 }

@@ -29,6 +29,7 @@ public class ResourceDtoService {
         resource.setType(request.getType());
         resource.setCapacity(request.getCapacity());
         resource.setResourceGroupId(request.getResourceGroupId());
+        resource.setClientId(request.getClientId());
         return resource;
     }
 
@@ -38,13 +39,13 @@ public class ResourceDtoService {
         return ResourceResponse.fromEntity(saved);
     }
 
-    public Optional<ResourceResponse> getById(Long id) {
-        return resourceService.getById(id)
+    public Optional<ResourceResponse> getById(Long id, Long clientId) {
+        return resourceService.getById(id, clientId)
                 .map(ResourceResponse::fromEntity);
     }
 
-    public Optional<ResourceResponse> getByName(String name) {
-        return resourceService.getByName(name)
+    public Optional<ResourceResponse> getByName(String name, Long clientId) {
+        return resourceService.getByName(name, clientId)
                 .map(ResourceResponse::fromEntity);
     }
 }

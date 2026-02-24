@@ -2,6 +2,7 @@ package com.booking.commons.service;
 
 import com.booking.commons.entity.Resource;
 import com.booking.commons.entity.ResourceGroup;
+import com.booking.commons.exception.ClientIdMismatchException;
 import com.booking.commons.repository.ResourceGroupRepository;
 import com.booking.commons.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,27 +27,35 @@ public class ResourceGroupService {
         return resourceGroupRepository.save(resourceGroup);
     }
 
-    public Resource addResourceToGroup(Long resourceId, Long groupId) {
+    public Resource addResourceToGroup(Long resourceId, Long groupId, Long clientId) {
         Optional<Resource> resourceOpt = resourceRepository.findById(resourceId);
         if (resourceOpt.isPresent()) {
             Resource resource = resourceOpt.get();
+            if (!resource.getClientId().equals(clientId)) {
+                throw new ClientIdMismatchException("Client ID does not match the resource owner");
+            }
             resource.setResourceGroupId(groupId);
             return resourceRepository.save(resource);
         }
         throw new IllegalArgumentException("Resource not found");
     }
 
-    public Resource removeResourceFromGroup(Long resourceId) {
+    public Resource removeResourceFromGroup(Long resourceId, Long clientId) {
         Optional<Resource> resourceOpt = resourceRepository.findById(resourceId);
         if (resourceOpt.isPresent()) {
             Resource resource = resourceOpt.get();
+            if (!resource.getClientId().equals(clientId)) {
+                throw new ClientIdMismatchException("Client ID does not match the resource owner");
+            }
             resource.setResourceGroupId(null);
             return resourceRepository.save(resource);
         }
         throw new IllegalArgumentException("Resource not found");
     }
 
-    public List<ResourceGroup> getAll() {
-        return resourceGroupRepository.findAll();
+    public List<ResourceGroup> getAll(Long clientId) {
+        return resourceGroupRepository.findAll().stream()
+                .filter(group -> clientId.equals(group.getClientId()))
+                .toList();
     }
 }

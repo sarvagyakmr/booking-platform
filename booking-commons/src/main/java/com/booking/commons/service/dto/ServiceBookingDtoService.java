@@ -28,6 +28,7 @@ public class ServiceBookingDtoService {
         booking.setCustomerEmail(request.getCustomerEmail());
         booking.setStartTime(request.getStartTime());
         booking.setEndTime(request.getEndTime());
+        booking.setClientId(request.getClientId());
         // Simple string to enum; enhance with try/catch or map in production
         if (request.getStatus() != null) {
             booking.setStatus(com.booking.commons.entity.BookingStatus.valueOf(request.getStatus().toUpperCase()));
@@ -41,8 +42,8 @@ public class ServiceBookingDtoService {
         return ServiceBookingResponse.fromEntity(saved);
     }
 
-    public Optional<ServiceBookingResponse> getById(Long id) {
-        return serviceBookingService.getById(id)
+    public Optional<ServiceBookingResponse> getById(Long id, Long clientId) {
+        return serviceBookingService.getById(id, clientId)
                 .map(ServiceBookingResponse::fromEntity);
     }
 }

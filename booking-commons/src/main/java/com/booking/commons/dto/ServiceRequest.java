@@ -18,4 +18,5 @@ public class ServiceRequest {
     private Integer durationMinutes;
     private BigDecimal price;
     private Long resourceGroupId;  // ID ref
+    private Long clientId;  // ID ref - set from request header
 }

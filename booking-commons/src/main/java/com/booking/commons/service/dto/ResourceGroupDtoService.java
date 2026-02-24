@@ -25,6 +25,7 @@ public class ResourceGroupDtoService {
         ResourceGroup group = new ResourceGroup();
         group.setName(request.getName());
         group.setDescription(request.getDescription());
+        group.setClientId(request.getClientId());
         return group;
     }
 
@@ -35,16 +36,16 @@ public class ResourceGroupDtoService {
     }
 
     // add/remove return Resource; map to simple response or keep as-is
-    public Resource addResourceToGroup(Long resourceId, Long groupId) {
-        return resourceGroupService.addResourceToGroup(resourceId, groupId);
+    public Resource addResourceToGroup(Long resourceId, Long groupId, Long clientId) {
+        return resourceGroupService.addResourceToGroup(resourceId, groupId, clientId);
     }
 
-    public Resource removeResourceFromGroup(Long resourceId) {
-        return resourceGroupService.removeResourceFromGroup(resourceId);
+    public Resource removeResourceFromGroup(Long resourceId, Long clientId) {
+        return resourceGroupService.removeResourceFromGroup(resourceId, clientId);
     }
 
-    public List<ResourceGroupResponse> getAll() {
-        return resourceGroupService.getAll().stream()
+    public List<ResourceGroupResponse> getAll(Long clientId) {
+        return resourceGroupService.getAll(clientId).stream()
                 .map(ResourceGroupResponse::fromEntity)
                 .toList();
     }

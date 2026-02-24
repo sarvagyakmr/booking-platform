@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 /**
  * REST Controller for Resource (uses ResourceDtoService).
  * Endpoints mirror DTO service methods for the booking platform APIs.
@@ -16,25 +14,29 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/resources")
 @RequiredArgsConstructor
-public class ResourceController {
+public class ResourceController extends AbstractController {
 
     private final ResourceDtoService resourceDtoService;
 
     @PostMapping
     public ResponseEntity<ResourceResponse> create(@RequestBody ResourceRequest request) {
+        Long clientId = getClientId();
+        request.setClientId(clientId);
         return ResponseEntity.ok(resourceDtoService.create(request));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ResourceResponse> getById(@PathVariable(name = "id") Long id) {
-        return resourceDtoService.getById(id)
+        Long clientId = getClientId();
+        return resourceDtoService.getById(id, clientId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/by-name")
     public ResponseEntity<ResourceResponse> getByName(@RequestParam(name = "name") String name) {
-        return resourceDtoService.getByName(name)
+        Long clientId = getClientId();
+        return resourceDtoService.getByName(name, clientId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

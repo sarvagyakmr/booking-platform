@@ -23,5 +23,8 @@ public class ResourceGroup extends BaseEntity {
 
     private String description;
 
+    // ID reference to the client who owns this resource group
+    private Long clientId;
+
     // Can hold additional metadata; grouping of resources/items done via ID refs in services/bookings
 }

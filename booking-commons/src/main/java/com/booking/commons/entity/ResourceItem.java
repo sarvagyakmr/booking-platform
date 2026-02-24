@@ -27,4 +27,7 @@ public class ResourceItem extends BaseEntity {
     private Long resourceId;
 
     private Integer quantityAvailable;
+
+    // ID reference to the client who owns this resource item
+    private Long clientId;
 }
